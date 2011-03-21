@@ -12,16 +12,26 @@ typedef union{
   double   F64;
 }Value_Union;
 
-typedef struct{
-      //  Fields known by ghdl.//
-      Value_Union Value;
-      Value_Union Driving_Value;
-      Value_Union Last_Value;
-      Std_Time    Last_Event;
-      Std_Time    Last_Active;
+struct Ghdl_Signal_;
+typedef struct Ghdl_Signal_* Ghdl_Signal_Ptr;
+struct Ghdl_Signal_{
+	//  Fields known by ghdl.//
+	Value_Union Value;
+	Value_Union Driving_Value;
+	Value_Union Last_Value;
+	Std_Time    Last_Event;
+	Std_Time    Last_Active;
+	// Chain of signals.
+	//  Used to build nets.
+	//  This is also the simply linked list of future active signals.
+	Ghdl_Signal_Ptr Link;
+  bool        event;
+	bool        active;
+	//  If set, the activity of the signal is required by the user.
+	bool        Has_Active;
 }Ghdl_Signal;
 
-typedef Ghdl_Signal* Ghdl_Signal_Ptr;
+
 typedef Value_Union* Ghdl_Value_Ptr;
 
 #endif //#ifndef __GHDL_SIGNALS_H__

@@ -89,22 +89,22 @@ void __ghdl_signal_name_rti(Ghdl_Rti_Access sig,
 }
 
 void __ghdl_stack2_allocate(){
-  printf("__ghdl_stack2_allocate\n");
+  printf("__ghdl_stack2_allocate unimplemented\n");
   abort();
 }
 
 void __ghdl_memcpy(){
-  printf("__ghdl_memcpy\n");
+  printf("__ghdl_memcpy unimplemented\n");
   abort();
 }
 
 void __ghdl_bound_check_failed_l1(){
-  printf("__ghdl_bound_check_failed_l1\n");
+  printf("__ghdl_bound_check_failed_l1 unimplemented\n");
   abort();
 }
 
 void __ghdl_bound_check_failed_l0(){
-  printf("__ghdl_bound_check_failed_l0\n");
+  printf("__ghdl_bound_check_failed_l0 unimplemented\n");
   abort();
 }
 
