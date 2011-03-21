@@ -14,10 +14,12 @@ entity test is
 end entity ;
 
 architecture rtl of test is
-  signal i,j:integer:=10;
+  signal i,j,k:integer:=10;
 begin
-  
-  i<=i+1;
-  j<=j+1;
-
+  TEST:process(k)
+  begin
+  i<=k+k;
+  j<=k+k;
+  j<=k*2;
+  end process;
 end architecture rtl;

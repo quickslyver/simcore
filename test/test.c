@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include "ghdl_rti.h"
-
+#include "ghdl/ghdl_rti.h"
+#include "ghdl/ghdl_signals.h"
 #define __USE_GNU  //dladdr() is a GLIBC non std function
 #include <dlfcn.h>
 
@@ -10,7 +10,7 @@ Ghdl_Rtin_Object* sig_Rti;
 
 const char* getSymbol(void* addr){
   Dl_info info;
-  if(dladdr(addr,&info))
+  if(dladdr(addr,&info) && info.dli_saddr == addr)
     return info.dli_sname;
   return "unknown location";
 }
@@ -25,6 +25,10 @@ void dump_sig_Rti(){
   printf("  type   name  : %s \n",((Ghdl_Rtin_Object*)sig_Rti->obj_Type)->name);
 }
 
+void dump_block_rti(Ghdl_Rtin_Block* rti){
+  printf("  block name   : %s \n",rti->Name);
+}
+
 /* function Ghdl_Create_Signal_E32
      (Init_Val : Ghdl_E32;
       Resolv_Func : System.Address;
@@ -35,7 +39,9 @@ Ghdl_Signal_Ptr __ghdl_create_signal_i32(uint32_t init_Val,void* resolv_func,voi
   printf("  init_val     : %d \n",init_Val);
   printf("  resolv_func  : %s \n",getSymbol(resolv_func));
   printf("  resolv_inst  : %s \n",getSymbol(resolv_inst));
-  return NULL;
+  Ghdl_Signal_Ptr sig=malloc(sizeof(Ghdl_Signal));
+  printf("  signal addr  : %p \n",sig);
+  return sig;
 }
 
 void __ghdl_process_add_sensitivity(){
@@ -50,13 +56,14 @@ void __ghdl_process_add_sensitivity(){
 void __ghdl_sensitized_process_register(
     void* instance,
     void* proc,
-    Ghdl_Rti_Access* ctxt,
+    Ghdl_Rtin_Block_Acc ctxt,
     void* addr){
   printf("\n__ghdl_sensitized_process_register() called\n");
   printf("  instance     : %p (%s)\n",instance,getSymbol(instance));
   printf("  proc         : %p (%s)\n",proc,getSymbol(proc));
   printf("  ctxt         : %p (%s)\n",ctxt,getSymbol(ctxt));
   printf("  addr         : %p (%s)\n",addr,getSymbol(addr));
+  dump_block_rti(ctxt);
 }
 
 void __ghdl_signal_active_chain(){

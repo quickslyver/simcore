@@ -1,4 +1,9 @@
+#ifndef __GHDL_RTI_H__
+#define __GHDL_RTI_H__
 #include <stdbool.h>
+#include <stdint.h>
+
+typedef uint32_t Ghdl_Index_Type;
 
 enum Ghdl_Rtik_enum32{
   Ghdl_Rtik_Top,
@@ -75,34 +80,28 @@ typedef struct{
   Ghdl_Rti_Loc    loc;
   Ghdl_Rti_Access obj_Type;
 }Ghdl_Rtin_Object;
+typedef Ghdl_Rtin_Object* Ghdl_Rtin_Object_Acc;
+
+typedef Ghdl_Rti_Access* Ghdl_Rti_Array;
+typedef Ghdl_Rti_Array** Ghdl_Rti_Arr_Acc;
+
+typedef struct{
+  Ghdl_Rti_Common  Common;
+  Ghdl_C_String    Name;
+  Ghdl_Rti_Loc     Loc;
+  Ghdl_Rti_Access  Parent;
+  Ghdl_Index_Type  Size;
+  Ghdl_Index_Type  Nbr_Child;
+  Ghdl_Rti_Arr_Acc Children;
+}Ghdl_Rtin_Block;
+typedef Ghdl_Rtin_Block* Ghdl_Rtin_Block_Acc;
 
 /*  An RTI context contains a pointer (BASE) to or into an instance.
     BLOCK describes data being pointed.  If a reference is made to a field
     described by a parent of BLOCK, BASE must be modified.*/
 typedef struct{
-      void* base;
-      Ghdl_Rti_Access block;
+  void* base;
+  Ghdl_Rti_Access block;
 }Rti_Context;
 
-typedef uint64_t Std_Time;
-
-typedef union{
-  bool     B2;
-  uint8_t  E8;
-  uint32_t E32;
-  uint32_t I32;
-  uint64_t I64;
-  double   F64;
-}Value_Union;
-
-typedef struct{
-      //  Fields known by ghdl.//
-      Value_Union Value;
-      Value_Union Driving_Value;
-      Value_Union Last_Value;
-      Std_Time    Last_Event;
-      Std_Time    Last_Active;
-}Ghdl_Signal;
-
-typedef Ghdl_Signal* Ghdl_Signal_Ptr;
-typedef Value_Union* Ghdl_Value_Ptr;
+#endif //#ifndef __GHDL_RTI_H__
